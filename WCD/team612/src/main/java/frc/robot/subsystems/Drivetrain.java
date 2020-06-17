@@ -11,20 +11,34 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Drivetrain extends SubsystemBase {
 
-  // Controller deadzone constant
-  private final double DEADZONE = 0.1;
+ 
+  // Initializes an encoder on DIO pins 0 and 1
+  // Defaults to 4X decoding and non-inverted
+  Encoder encoder = new Encoder(0, 1);
+    // Talons for drivetrain
+    private CANSparkMax spark_fr_drive = new CANSparkMax(Constants.SPARK_FR_DRIVE, MotorType.kBrushless);
+    private CANSparkMax spark_fl_drive = new CANSparkMax(Constants.SPARK_FL_DRIVE, MotorType.kBrushless);
+    private CANSparkMax spark_br_drive = new CANSparkMax(Constants.SPARK_BR_DRIVE, MotorType.kBrushless);
+    private CANSparkMax spark_bl_drive = new CANSparkMax(Constants.SPARK_BL_DRIVE, MotorType.kBrushless);
   
-  // Talons for drivetrain
-  private CANSparkMax spark_fr_drive = new CANSparkMax(Constants.SPARK_FR_DRIVE, MotorType.kBrushless);
-  private CANSparkMax spark_fl_drive = new CANSparkMax(Constants.SPARK_FL_DRIVE, MotorType.kBrushless);
-  private CANSparkMax spark_br_drive = new CANSparkMax(Constants.SPARK_BR_DRIVE, MotorType.kBrushless);
-  private CANSparkMax spark_bl_drive = new CANSparkMax(Constants.SPARK_BL_DRIVE, MotorType.kBrushless);
+    SpeedControllerGroup leftMotors = new SpeedControllerGroup(spark_fl_drive, spark_bl_drive);
+    SpeedControllerGroup rightMotors = new SpeedControllerGroup(spark_fr_drive, spark_br_drive);
+    
+    DifferentialDrive drive = new DifferentialDrive(leftMotors, rightMotors);
+     // Controller deadzone constant
+    private final double DEADZONE = 0.1;
+
+  //private RobotContainer m_robotContainer;
+  
 
   // Double solenoid for changing gears
   private DoubleSolenoid solenoid_drive = new DoubleSolenoid(Constants.PCM_2, Constants.SOLENOID_DRIVE[0], Constants.SOLENOID_DRIVE[1]);
