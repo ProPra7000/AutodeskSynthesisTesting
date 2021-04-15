@@ -1,2 +1,2 @@
-# AutodeskSynthesisTesting
-Goal is to support emulation of new code and mechanical designs
+# Vision Software
+Goal is to create a vision software for the robot
